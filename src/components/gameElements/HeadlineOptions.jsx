@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function HeadlineOptions({ articles }) {
   const [words, setWords] = useState([]);
@@ -47,9 +48,13 @@ export default function HeadlineOptions({ articles }) {
       <div className="font-bold">Headline Options</div>
       <div className="flex flex-wrap gap-2">
         {words.map(({ id, word }) => (
-          <div key={id} className="p-2 bg-blue-200 rounded shadow">
+          <motion.div
+            drag
+            key={id}
+            className="p-2 bg-blue-200 rounded shadow hover:cursor-pointer"
+          >
             {word}
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
