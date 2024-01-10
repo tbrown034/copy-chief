@@ -1,0 +1,16 @@
+{
+    "headlines": [
+      {"date": "2024-01-10", "category": "Health", "headline": "Breakthrough in Alzheimer's Treatment Shows Promise", "summary": "A new drug shows remarkable results in early trials, offering hope for Alzheimer's treatment.", "link": "https://news.example.com/health/alzheimers-breakthrough"},
+      {"date": "2024-01-10", "category": "Economy", "headline": "Global Markets Rally on New Trade Agreement", "summary": "Markets surge as countries sign a groundbreaking new trade deal.", "link": "https://news.example.com/economy/trade-agreement-success"},
+      {"date": "2024-01-10", "category": "Science", "headline": "Mars Rover Discovers New Evidence of Water", "summary": "NASA's latest Mars rover mission uncovers signs of ancient water beds.", "link": "https://news.example.com/science/mars-water-discovery"},
+      {"date": "2024-01-10", "category": "Environment", "headline": "Major Cities to Implement Green Infrastructure Plans", "summary": "Urban centers worldwide adopt new green infrastructure strategies to combat climate change.", "link": "https://news.example.com/environment/green-cities"},
+      {"date": "2024-01-10", "category": "Culture", "headline": "Annual Art Festival Showcases Emerging Talents", "summary": "This year's art festival highlights the works of up-and-coming artists from around the globe.", "link": "https://news.example.com/culture/art-festival"},
+      {"date": "2024-01-10", "category": "Education", "headline": "Innovative Learning Model Revolutionizes Schooling", "summary": "A new educational model blending technology and personalized learning is transforming schools.", "link": "https://news.example.com/education/learning-revolution"},
+      {"date": "2024-01-10", "category": "Politics", "headline": "New Climate Bill Promises Sweeping Changes", "summary": "The government passes a comprehensive climate bill aimed at reducing carbon emissions.", "link": "https://news.example.com/politics/climate-bill"},
+      {"date": "2024-01-10", "category": "Technology", "headline": "Tech Giants Face New Data Privacy Regulations", "summary": "Major technology companies will have to adhere to stricter data privacy laws.", "link": "https://news.example.com/technology/data-privacy"},
+      {"date": "2024-01-10", "category": "Sports", "headline": "Local Team Wins Championship After Decades", "summary": "The underdog team secures a championship victory, their first in over 30 years.", "link": "https://news.example.com/sports/championship-win"},
+      {"date": "2024-01-10", "category": "Entertainment", "headline": "Blockbuster Movie Breaks Box Office Records", "summary": "The latest blockbuster sets a new record for opening weekend box office earnings.", "link": "https://news.example.com/entertainment/movie-record"},
+      {"date": "2024-01-10", "category": "International", "headline": "Diplomatic Summit Aims to Resolve Long-Standing Conflict", "summary": "World leaders meet to discuss peaceful solutions to an ongoing global conflict.", "link": "https://news.example.com/international/diplomatic-summit"},
+      {"date": "2024-01-10", "category": "Finance", "headline": "Cryptocurrency Regulation Talks Gain Momentum", "summary": "Governments worldwide are moving towards stricter regulations on cryptocurrency trading.", "link": "https://news.example.com/finance/crypto-regulation"}
+    ]
+  }
