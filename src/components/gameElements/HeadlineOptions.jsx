@@ -9,8 +9,11 @@ export default function HeadlineOptions({ articles }) {
       try {
         // Extracting words from the headlines of the articles
         const allWords = articles.flatMap((article) =>
-          article.title.split(/\W+/).filter(Boolean)
+          article.title
+            .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s|[\s,]+/)
+            .filter(Boolean)
         );
+
         const shuffledWords = shuffleArray([...new Set(allWords)]);
         const wordsWithIds = shuffledWords.map((word, index) => ({
           id: `word-${index}`,
