@@ -9,6 +9,7 @@ export default function GameMenu({ backToMenu }) {
   const [error, setError] = useState(null);
 
   const API_KEY = import.meta.env.VITE_NYT_API_KEY;
+  const numOfArticles = 5;
 
   useEffect(() => {
     const fetchHeadlines = async () => {
@@ -20,7 +21,7 @@ export default function GameMenu({ backToMenu }) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setArticles(data.results);
+        setArticles(data.results.slice(0, numOfArticles));
       } catch (error) {
         console.error("There was a problem with the fetch operation", error);
         setError("Failed to load headlines");
