@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import HeadlineAnswers from "../gameElements/HeadlineAnswers";
+import HeadlineGuess from "../gameElements/HeadlineGuess";
 import HeadlineOptions from "../gameElements/HeadlineOptions";
 import Header from "./Header";
 
@@ -49,17 +50,21 @@ export default function GameMenu({ backToMenu }) {
   ) : !articles.length ? (
     <div>Loading headlines...</div>
   ) : (
-    <div className="h-screen">
+    <div className="">
       <Header />
-      <div className="flex flex-col items-center justify-center">
-        <button
-          onClick={backToMenu}
-          className="p-2 px-12 text-lg bg-sky-900 hover:bg-sky-700 active:bg-sky-600 text-sky-100 rounded-xl"
-        >
-          Back
-        </button>
+      <div className="flex flex-col justify-center gap-4">
+        <HeadlineGuess articles={articles} />
+
         <HeadlineOptions articles={articles} />
         <HeadlineAnswers articles={articles} />
+        <div className="flex justify-center">
+          <button
+            onClick={backToMenu}
+            className="p-2 px-12 text-lg bg-sky-900 hover:bg-sky-700 active:bg-sky-600 text-sky-100 rounded-xl"
+          >
+            Back
+          </button>
+        </div>
       </div>
     </div>
   );

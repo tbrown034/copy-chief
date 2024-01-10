@@ -13,7 +13,7 @@ function App() {
   };
 
   return (
-    <div className=" bg-sky-100 text-sky-950">
+    <div className="p-2 px-4 bg-sky-100 text-sky-950">
       {!showGameMenu ? (
         <MainMenu startGame={startGame} />
       ) : (

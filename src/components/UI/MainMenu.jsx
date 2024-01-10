@@ -1,7 +1,7 @@
 import CurrentDate from "./CurrentDate";
 export default function MainMenu({ startGame }) {
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-4 text-center">
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-2 text-center">
       <div className="w-24 h-24 ">
         <i className="p-2 text-6xl text-white bg-blue-400 fa-regular fa-newspaper rounded-2xl"></i>
       </div>
