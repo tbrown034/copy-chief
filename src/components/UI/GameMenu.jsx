@@ -1,3 +1,4 @@
+import HeadlineOptions from "../gameElements/HeadlineOptions";
 import Header from "./Header";
 
 export default function GameMenu({ backToMenu }) {
@@ -11,6 +12,7 @@ export default function GameMenu({ backToMenu }) {
         >
           Back
         </button>{" "}
+        <HeadlineOptions />
       </div>
     </div>
   );
