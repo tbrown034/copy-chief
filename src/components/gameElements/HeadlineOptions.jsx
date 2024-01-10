@@ -1,59 +1,42 @@
-import { useState, useEffect } from "react";
-import dummyHeadlines from "../../assets/Headliens/dummy_headlines.json";
+import React, { useState, useEffect } from "react";
 
-export default function HeadlineOptions() {
+export default function HeadlineOptions({ articles }) {
   const [words, setWords] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    try {
-      // Simulating fetching the last 5 articles (assuming dummyHeadlines is an object with a headlines array)
-      const lastFiveArticles = dummyHeadlines.headlines.slice(-5);
-
-      // Process headlines to extract words
-      const allWords = lastFiveArticles.flatMap((article) =>
-        article.headline.split(/\W+/).filter(Boolean)
-      );
-
-      // Shuffle words using a simple shuffle algorithm
-      const shuffledWords = shuffleArray([...new Set(allWords)]); // Remove duplicates with Set and shuffle
-
-      // Assign unique IDs based on index
-      const wordsWithIds = shuffledWords.map((word, index) => ({
-        id: `word-${index}`,
-        word,
-      }));
-
-      setWords(wordsWithIds);
-    } catch (err) {
-      setError("Failed to process headlines");
+    if (articles && articles.length > 0) {
+      try {
+        // Extracting words from the headlines of the articles
+        const allWords = articles.flatMap((article) =>
+          article.title.split(/\W+/).filter(Boolean)
+        );
+        const shuffledWords = shuffleArray([...new Set(allWords)]);
+        const wordsWithIds = shuffledWords.map((word, index) => ({
+          id: `word-${index}`,
+          word,
+        }));
+        setWords(wordsWithIds);
+      } catch (err) {
+        setError("Failed to process headlines");
+      }
     }
-    setLoading(false);
-  }, []);
+  }, [articles]);
 
-  // Shuffle function
   function shuffleArray(array) {
     let currentIndex = array.length,
       randomIndex;
-
-    // While there remain elements to shuffle...
     while (currentIndex !== 0) {
-      // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
-
-      // And swap it with the current element.
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex],
         array[currentIndex],
       ];
     }
-
     return array;
   }
 
-  if (loading) return <div>Loading headlines...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (

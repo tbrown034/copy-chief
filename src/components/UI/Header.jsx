@@ -2,7 +2,7 @@ export default function Header() {
   return (
     <div className="flex justify-between p-2 border-b-2 border-opacity-20 border-b-black">
       <div className="flex items-center gap-2 text-2xl">
-        <i class="fa-solid fa-bars"></i>
+        <i className="fa-solid fa-bars"></i>
         <div className="font-bold ">
           <span>Copy</span>
           <span>Chief</span>
