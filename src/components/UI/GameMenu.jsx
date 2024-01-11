@@ -10,7 +10,7 @@ export default function GameMenu({ backToMenu }) {
   const [error, setError] = useState(null);
 
   const API_KEY = import.meta.env.VITE_NYT_API_KEY;
-  const numOfArticles = 5;
+  const numOfArticles = 3;
 
   useEffect(() => {
     const fetchHeadlines = async () => {
@@ -52,7 +52,7 @@ export default function GameMenu({ backToMenu }) {
   ) : (
     <div className="">
       <Header />
-      <div className="flex flex-col justify-center gap-4">
+      <div className="flex flex-col ">
         <HeadlineGuess articles={articles} />
 
         <HeadlineOptions articles={articles} />
