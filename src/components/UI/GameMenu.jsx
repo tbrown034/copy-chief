@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import HeadlineAnswers from "../gameElements/HeadlineAnswers";
 import HeadlineGuess from "../gameElements/HeadlineGuess";
 import HeadlineOptions from "../gameElements/HeadlineOptions";
@@ -50,22 +52,24 @@ export default function GameMenu({ backToMenu }) {
   ) : !articles.length ? (
     <div>Loading headlines...</div>
   ) : (
-    <div className="">
-      <Header />
-      <div className="flex flex-col ">
-        <HeadlineGuess articles={articles} />
+    <DndProvider backend={HTML5Backend}>
+      <div className="">
+        <Header />
+        <div className="flex flex-col ">
+          <HeadlineGuess articles={articles} />
 
-        <HeadlineOptions articles={articles} />
-        <HeadlineAnswers articles={articles} />
-        <div className="flex justify-center">
-          <button
-            onClick={backToMenu}
-            className="p-2 px-12 text-lg bg-sky-900 hover:bg-sky-700 active:bg-sky-600 text-sky-100 rounded-xl"
-          >
-            Back
-          </button>
+          <HeadlineOptions articles={articles} />
+          <HeadlineAnswers articles={articles} />
+          <div className="flex justify-center">
+            <button
+              onClick={backToMenu}
+              className="p-2 px-12 text-lg bg-sky-900 hover:bg-sky-700 active:bg-sky-600 text-sky-100 rounded-xl"
+            >
+              Back
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </DndProvider>
   );
 }

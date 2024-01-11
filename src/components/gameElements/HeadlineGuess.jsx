@@ -1,43 +1,51 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { useDrop } from "react-dnd";
+
+const DropZone = ({ onDropWord, index, wordIndex }) => {
+  const [{ isOver }, drop] = useDrop({
+    accept: "word",
+    drop: (item) => onDropWord(item.word, index, wordIndex),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
+
+  const isActive = isOver;
+  let backgroundColor = "#fff";
+  if (isActive) {
+    backgroundColor = "darkgreen";
+  }
+
+  return (
+    <div
+      ref={drop}
+      style={{
+        backgroundColor,
+        width: "100px",
+        height: "20px",
+        border: "1px solid black",
+      }}
+    >
+      {/* Placeholder for dropped word */}
+    </div>
+  );
+};
 
 export default function HeadlineGuess({ articles }) {
   // State to track the words dropped into the headline containers
-  // It's an object where the keys are the headline indexes and the values are arrays of words
   const [droppedWords, setDroppedWords] = useState({});
 
-  // Function to handle the end of a drag event
-  const handleDragEnd = (index, word) => {
-    // Logic to determine if the word is dropped within a target container
-    // For now, we'll just log it to the console
-    console.log(`Dropped word: ${word} into headline #${index + 1}`);
-
-    // Update the dropped words state with the new word
-    setDroppedWords((prevState) => {
-      const newDroppedWords = { ...prevState };
-      if (!newDroppedWords[index]) {
-        newDroppedWords[index] = [];
-      }
-      newDroppedWords[index].push(word);
-      return newDroppedWords;
-    });
-  };
-
-  // Calculate the width of the longest word to define the drop container size
-  const calculateContainerWidth = () => {
-    const longestWordLength = articles
-      .flatMap((article) => article.title.split(/\s+/))
-      .reduce(
-        (longest, current) =>
-          longest.length >= current.length ? longest : current,
-        ""
-      ).length;
-    return `${longestWordLength * 12 + 10}px`;
-  };
-
-  // A helper function to clear all dropped words - could be triggered by a reset button
-  const clearDroppedWords = () => {
-    setDroppedWords({});
+  const handleDropWord = (word, index, wordIndex) => {
+    console.log(
+      `Dropped ${word} into headline #${index + 1} at position ${wordIndex}`
+    );
+    setDroppedWords((prevState) => ({
+      ...prevState,
+      [index]: {
+        ...prevState[index],
+        [wordIndex]: word,
+      },
+    }));
   };
 
   return (
@@ -51,27 +59,18 @@ export default function HeadlineGuess({ articles }) {
             } words`}</span>
           </div>
           <div className="flex items-center gap-2">
-            {article.title.split(" ").map((_, idx) => (
-              <motion.div
-                key={`word-container-${index}-${idx}`}
-                className="border-2 border-gray-300 rounded"
-                style={{ width: calculateContainerWidth(), height: "50px" }}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                // Placeholder for drag logic
-                onDragEnd={() => handleDragEnd(index, _)}
-                dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-                dragElastic={0.5}
-              >
-                {/* Placeholder for dropped word */}
-                {droppedWords[index] && droppedWords[index][idx]}
-              </motion.div>
+            {article.title.split(" ").map((_, wordIndex) => (
+              <DropZone
+                key={`word-container-${index}-${wordIndex}`}
+                onDropWord={handleDropWord}
+                index={index}
+                wordIndex={wordIndex}
+              />
             ))}
           </div>
         </div>
       ))}
-      {/* Button to clear all dropped words */}
-      <button onClick={clearDroppedWords}>Clear All</button>
+      <button onClick={() => setDroppedWords({})}>Clear All</button>
     </div>
   );
 }
