@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function HeadlineOptions({ articles, onDragEnd }) {
+export default function HeadlineOptions({ articles }) {
   const [words, setWords] = useState([]);
-  const [sortOrder, setSortOrder] = useState(""); // Tracks the sort order: "", "asc", or "desc"
+  const [sorted, setSorted] = useState(false); // Track if the words are sorted
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (articles && articles.length > 0) {
-      // Extract and shuffle words when articles are first loaded or changed
-      const extractedWords = extractWords(articles);
-      setWords(shuffleArray(extractedWords));
+      try {
+        // Extracting words from the headlines of the articles
+        const allWords = articles.flatMap((article) =>
+          article.title
+            .split(/(?<!\w\.\w.)(?<![A-Z][a.z]\.)(?<=\.|\?)\s|[\s,]+/)
+            .filter(Boolean)
+        );
+
+        // Remove duplicates and shuffle
+        const uniqueWords = [...new Set(allWords)];
+        const wordsWithIds = uniqueWords.map((word, index) => ({
+          id: `word-${index}`,
+          word,
+        }));
+        setWords(shuffleArray(wordsWithIds));
+      } catch (err) {
+        setError("Failed to process headlines");
+      }
     }
   }, [articles]);
-
-  // Extract words from article titles and assign unique IDs
-  const extractWords = (articles) => {
-    return articles
-      .flatMap((article) => article.title.split(/\W+/).filter(Boolean))
-      .map((word) => ({
-        word,
-        id: `${word}-${Math.random().toString(36).substr(2, 9)}`,
-      }));
-  };
 
   // Shuffle the array of words
   const shuffleArray = (array) => {
@@ -40,34 +45,38 @@ export default function HeadlineOptions({ articles, onDragEnd }) {
   };
 
   // Sort the array of words
-  const sortArray = (array, order) => {
-    return [...array].sort((a, b) => {
-      return order === "asc"
-        ? a.word.localeCompare(b.word)
-        : b.word.localeCompare(a.word);
+  const sortWords = (array, descending = false) => {
+    return array.sort((a, b) => {
+      return descending
+        ? b.word.localeCompare(a.word)
+        : a.word.localeCompare(b.word);
     });
   };
 
-  // Handler to toggle sorting
-  const toggleSortOrder = () => {
-    const newOrder = sortOrder === "asc" ? "desc" : "asc";
-    setSortOrder(newOrder);
-    setWords(sortArray(words, newOrder));
+  // Toggle between sorted and shuffled words
+  const toggleSort = () => {
+    if (sorted) {
+      // Currently sorted A-Z, so sort Z-A
+      setWords(sortWords([...words], true)); // Sort Z-A
+      setSorted(false); // Update sorted state to false
+    } else {
+      // Currently shuffled or sorted Z-A, so sort A-Z
+      setWords(sortWords([...words])); // Sort A-Z
+      setSorted(true); // Update sorted state to true
+    }
   };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="flex flex-col gap-2 p-4">
       <div className="flex items-center justify-between font-bold">
         <span>Headline Options</span>
         <button
-          onClick={toggleSortOrder}
+          onClick={toggleSort}
           className="px-3 py-1 transition duration-300 bg-gray-200 rounded hover:bg-gray-300"
         >
-          Sort {sortOrder === "asc" ? "Z-A" : "A-Z"}
+          Sort {sorted ? "Z-A" : "A-Z"}
         </button>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -76,7 +85,6 @@ export default function HeadlineOptions({ articles, onDragEnd }) {
             drag
             key={id}
             className="p-2 bg-blue-200 rounded shadow hover:cursor-pointer"
-            onDragEnd={() => onDragEnd(id)}
           >
             {word}
           </motion.div>
