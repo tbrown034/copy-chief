@@ -55,18 +55,13 @@ export default function HeadlineOptions({ articles }) {
 
   // Toggle between sorted and shuffled words
   const toggleSort = () => {
-    if (sorted) {
-      // Currently sorted A-Z, so sort Z-A
-      setWords(sortWords([...words], true)); // Sort Z-A
-      setSorted(false); // Update sorted state to false
-    } else {
-      // Currently shuffled or sorted Z-A, so sort A-Z
-      setWords(sortWords([...words])); // Sort A-Z
-      setSorted(true); // Update sorted state to true
-    }
+    setSorted(!sorted);
+    setWords(sortWords([...words], sorted));
   };
 
-  if (error) return <div>Error: {error}</div>;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="flex flex-col gap-2 p-4">
@@ -76,15 +71,22 @@ export default function HeadlineOptions({ articles }) {
           onClick={toggleSort}
           className="px-3 py-1 transition duration-300 bg-gray-200 rounded hover:bg-gray-300"
         >
-          Sort {sorted ? "Z-A" : "A-Z"}
+          Sort {sorted ? "A-Z" : "Z-A"}
         </button>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 text-xs">
         {words.map(({ id, word }) => (
           <motion.div
             drag
             key={id}
             className="p-2 bg-blue-200 rounded shadow hover:cursor-pointer"
+            dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+            whileDrag={{ scale: 1.1 }}
+            onDragEnd={(event, info) => {
+              // This is where you could add the logic to handle the end of a drag
+              // For now, it will just log the position where the word was dropped
+              console.log(info.point.x, info.point.y);
+            }}
           >
             {word}
           </motion.div>
