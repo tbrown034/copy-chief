@@ -11,41 +11,44 @@ const DropZone = ({ onDropWord, index, wordIndex }) => {
   });
 
   const isActive = isOver;
-  let backgroundColor = "#fff";
-  if (isActive) {
-    backgroundColor = "darkgreen";
-  }
+  let backgroundColor = isActive ? "darkgreen" : "#fff";
+
+  // Set a fixed width and height for the drop zones
+  const style = {
+    width: "60px", // You may adjust the width as needed
+    height: "30px", // You may adjust the height as needed
+    backgroundColor,
+    display: "flex",
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    color: isActive ? "#fff" : "#000",
+    border: "1px solid #ddd",
+    borderRadius: "4px",
+  };
 
   return (
-    <div
-      ref={drop}
-      style={{
-        backgroundColor,
-        width: "100px",
-        height: "20px",
-        border: "1px solid black",
-      }}
-    >
+    <div ref={drop} style={style}>
       {/* Placeholder for dropped word */}
     </div>
   );
 };
 
 export default function HeadlineGuess({ articles }) {
-  // State to track the words dropped into the headline containers
   const [droppedWords, setDroppedWords] = useState({});
 
   const handleDropWord = (word, index, wordIndex) => {
     console.log(
       `Dropped ${word} into headline #${index + 1} at position ${wordIndex}`
     );
-    setDroppedWords((prevState) => ({
-      ...prevState,
-      [index]: {
-        ...prevState[index],
-        [wordIndex]: word,
-      },
-    }));
+    // Update the dropped words state with the new word
+    setDroppedWords((prevState) => {
+      const newDroppedWords = { ...prevState };
+      if (!newDroppedWords[index]) {
+        newDroppedWords[index] = [];
+      }
+      newDroppedWords[index][wordIndex] = word;
+      return newDroppedWords;
+    });
   };
 
   return (
@@ -58,7 +61,7 @@ export default function HeadlineGuess({ articles }) {
               article.title.split(" ").length
             } words`}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {article.title.split(" ").map((_, wordIndex) => (
               <DropZone
                 key={`word-container-${index}-${wordIndex}`}
@@ -70,7 +73,6 @@ export default function HeadlineGuess({ articles }) {
           </div>
         </div>
       ))}
-      <button onClick={() => setDroppedWords({})}>Clear All</button>
     </div>
   );
 }
