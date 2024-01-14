@@ -8,8 +8,8 @@ export default function DraggableWord({ word, removeWordFromOptions }) {
       isDragging: monitor.isDragging(),
     }),
     end: (item, monitor) => {
-      if (monitor.didDrop()) {
-        removeWordFromOptions(item.word);
+      if (!monitor.didDrop()) {
+        addWordToOptions(item.word);
       }
     },
   });
