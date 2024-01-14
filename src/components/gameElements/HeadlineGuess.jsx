@@ -1,31 +1,5 @@
 import React, { useState } from "react";
-import { useDrop } from "react-dnd";
-
-// DropZone component represents each slot for dropping words
-const DropZone = ({ onDropWord, index, wordIndex, placedWord }) => {
-  const [{ isOver }, drop] = useDrop({
-    accept: "word",
-    drop: (item) => onDropWord(item.word, index, wordIndex),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  });
-
-  // Define Tailwind classes for each state
-  const baseClasses =
-    "h-12 p-2 text-lg font-bold border-2 border-blue-800 rounded-lg min-w-12";
-  const placedWordClasses = placedWord ? "bg-sky-800 text-sky-100" : "bg-white"; // Replace 'bg-lightblue-500' with your actual Tailwind class
-  const hoverClasses = isOver ? "bg-lightblue-500" : ""; // Replace 'bg-lightblue-500' with your actual Tailwind class
-
-  return (
-    <div
-      ref={drop}
-      className={`${baseClasses} ${placedWordClasses} ${hoverClasses}`}
-    >
-      {placedWord}
-    </div>
-  );
-};
+import DropZone from "./DropZone";
 
 // HeadlineGuess component where all DropZones for a headline are rendered
 export default function HeadlineGuess({ articles, onWordRemoved }) {
@@ -33,13 +7,21 @@ export default function HeadlineGuess({ articles, onWordRemoved }) {
 
   // Function called when a word is dropped into a DropZone
   const handleDropWord = (word, index, wordIndex) => {
-    setDroppedWords((prev) => ({
-      ...prev,
-      [index]: {
-        ...(prev[index] || {}),
-        [wordIndex]: word,
-      },
-    }));
+    setDroppedWords((prev) => {
+      const newState = { ...prev };
+      // Remove the word from its previous position
+      Object.keys(newState).forEach((key) => {
+        Object.keys(newState[key]).forEach((wordKey) => {
+          if (newState[key][wordKey] === word) {
+            delete newState[key][wordKey];
+          }
+        });
+      });
+      // Add the word to the new position
+      newState[index] = newState[index] || {};
+      newState[index][wordIndex] = word;
+      return newState;
+    });
   };
 
   // Function to clear all placed words

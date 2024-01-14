@@ -1,32 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useDrag } from "react-dnd";
-
-const DraggableWord = ({ word, removeWordFromOptions }) => {
-  const [{ isDragging }, drag] = useDrag({
-    type: "word",
-    item: { word },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    end: (item, monitor) => {
-      if (monitor.didDrop()) {
-        removeWordFromOptions(item.word);
-      }
-    },
-  });
-
-  return (
-    <div
-      ref={drag}
-      className={`p-2 bg-blue-200 rounded shadow hover:cursor-pointer ${
-        isDragging ? "opacity-50" : "opacity-100"
-      }`}
-    >
-      {word}
-    </div>
-  );
-};
-
+import DraggableWord from "./DraggableWord.jsx";
 export default function HeadlineOptions({ articles }) {
   const [sortOrder, setSortOrder] = useState("asc");
 
