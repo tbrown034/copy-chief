@@ -1,18 +1,26 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import HeadlineAnswers from "../gameElements/HeadlineAnswers";
-import HeadlineGuess from "../gameElements/HeadlineGuess";
-import HeadlineOptions from "../gameElements/HeadlineOptions";
-import Header from "./Header";
+import HeadlineAnswers from "../gameElements/HeadlineAnswers"; // Adjust the import path as needed
+import HeadlineGuess from "../gameElements/HeadlineGuess"; // Adjust the import path as needed
+import HeadlineOptions from "../gameElements/HeadlineOptions"; // Adjust the import path as needed
+import Header from "./Header"; // Adjust the import path as needed
 
 export default function GameMenu({ backToMenu }) {
   const [articles, setArticles] = useState([]);
-  const [completedHeadlines, setCompletedHeadlines] = useState({});
   const [error, setError] = useState(null);
+  const [headlineCorrectness, setHeadlineCorrectness] = useState({});
 
   const API_KEY = import.meta.env.VITE_NYT_API_KEY;
   const numOfArticles = 3;
+
+  // Inside GameMenu component
+  const handleWordRemoved = (word) => {
+    // Logic to handle a word being removed.
+    // This could involve updating state or any other logic needed.
+  };
+
+  // Inside your component return function, pass it down to HeadlineGuess
 
   useEffect(() => {
     const fetchHeadlines = async () => {
@@ -30,21 +38,13 @@ export default function GameMenu({ backToMenu }) {
         setError("Failed to load headlines");
       }
     };
-
     fetchHeadlines();
   }, []);
 
-  const checkAnswer = (articleIndex, userAnswer) => {
-    const correctAnswer = headlines[articleIndex].headline
-      .split(/\W+/)
-      .filter(Boolean);
-    const isCorrect =
-      userAnswer.length === correctAnswer.length &&
-      userAnswer.every((word, index) => word === correctAnswer[index]);
-    setCompletedHeadlines({
-      ...completedHeadlines,
-      [articleIndex]: isCorrect,
-    });
+  // Function to handle the check answer logic
+  // You will need to implement this based on your game's rules
+  const checkAnswer = (/* parameters */) => {
+    // ... implementation
   };
 
   return error ? (
@@ -53,10 +53,13 @@ export default function GameMenu({ backToMenu }) {
     <div>Loading headlines...</div>
   ) : (
     <DndProvider backend={HTML5Backend}>
-      <div className="">
+      <div className="min-h-screen ">
         <Header />
-        <div className="flex flex-col ">
-          <HeadlineGuess articles={articles} />
+        <div className="flex flex-col gap-8">
+          <HeadlineGuess
+            articles={articles}
+            onWordRemoved={handleWordRemoved}
+          />
 
           <HeadlineOptions articles={articles} />
           <HeadlineAnswers articles={articles} />

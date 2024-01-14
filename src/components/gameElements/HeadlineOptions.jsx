@@ -1,13 +1,18 @@
 import React, { useState, useMemo } from "react";
 import { useDrag } from "react-dnd";
 
-const DraggableWord = ({ word }) => {
+const DraggableWord = ({ word, removeWordFromOptions }) => {
   const [{ isDragging }, drag] = useDrag({
     type: "word",
     item: { word },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    end: (item, monitor) => {
+      if (monitor.didDrop()) {
+        removeWordFromOptions(item.word);
+      }
+    },
   });
 
   return (
@@ -23,39 +28,52 @@ const DraggableWord = ({ word }) => {
 };
 
 export default function HeadlineOptions({ articles }) {
-  const [sortOrder, setSortOrder] = useState("none"); // none, asc, desc
+  const [sortOrder, setSortOrder] = useState("asc");
 
-  // Use useMemo to optimize performance and prevent unnecessary sorting on re-renders
-  const sortedWords = useMemo(() => {
-    let allWords = articles.flatMap((article) => article.title.split(/\s+/));
-    let uniqueWords = [...new Set(allWords)]; // Remove duplicates
+  const words = useMemo(() => {
+    const allWords = articles.flatMap((article) => article.title.split(/\s+/));
+    const uniqueWords = [...new Set(allWords)];
     if (sortOrder === "asc") {
-      uniqueWords.sort((a, b) => a.localeCompare(b));
-    } else if (sortOrder === "desc") {
-      uniqueWords.sort((a, b) => b.localeCompare(a));
+      return uniqueWords.sort((a, b) => a.localeCompare(b));
+    } else {
+      return uniqueWords.sort((a, b) => b.localeCompare(a));
     }
-    return uniqueWords;
-  }, [articles, sortOrder]); // Depend on articles and sortOrder
+  }, [articles, sortOrder]);
 
-  // Handler to toggle sorting order
   const toggleSortOrder = () => {
-    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const removeWordFromOptions = (word) => {
+    // Logic to remove word from options
   };
 
   return (
-    <div className="p-2">
-      <div className="flex items-center justify-between mb-4">
-        <div className="text-2xl font-bold">Headline Options</div>
-        <button
-          onClick={toggleSortOrder}
-          className="px-4 py-2 transition-colors duration-300 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Sort {sortOrder === "asc" ? "Z-A" : "A-Z"}
-        </button>
-      </div>
-      <div className="flex flex-wrap gap-2 my-2">
-        {sortedWords.map((word, index) => (
-          <DraggableWord key={index} word={word} />
+    <div className="flex flex-col items-start gap-4 p-4">
+      <div className="mb-2 text-2xl font-bold">Headline Options</div>
+      <button
+        onClick={toggleSortOrder}
+        className="p-2 px-4 text-lg bg-sky-600 hover:bg-sky-700 active:bg-sky-600 text-sky-100 rounded-xl"
+      >
+        {sortOrder === "asc" ? (
+          <div className="flex items-center justify-center gap-2">
+            <span>A-Z</span>
+            <i class="fa-solid fa-down"></i>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center gap-2">
+            <span>Z-A</span>
+            <i class="fa-solid fa-up"></i>
+          </div>
+        )}
+      </button>
+      <div className="flex flex-wrap gap-2">
+        {words.map((word, index) => (
+          <DraggableWord
+            key={index}
+            word={word}
+            removeWordFromOptions={removeWordFromOptions}
+          />
         ))}
       </div>
     </div>
