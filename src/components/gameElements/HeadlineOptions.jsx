@@ -49,7 +49,7 @@ export default function HeadlineOptions({ articles }) {
   };
 
   return (
-    <div className="flex flex-col items-start gap-4 p-4">
+    <div className="flex flex-col items-start gap-2 ">
       <div className="mb-2 text-2xl font-bold">Headline Options</div>
       <button
         onClick={toggleSortOrder}
@@ -58,12 +58,12 @@ export default function HeadlineOptions({ articles }) {
         {sortOrder === "asc" ? (
           <div className="flex items-center justify-center gap-2">
             <span>A-Z</span>
-            <i class="fa-solid fa-down"></i>
+            <i className="fa-solid fa-down"></i>
           </div>
         ) : (
           <div className="flex items-center justify-center gap-2">
             <span>Z-A</span>
-            <i class="fa-solid fa-up"></i>
+            <i className="fa-solid fa-up"></i>
           </div>
         )}
       </button>

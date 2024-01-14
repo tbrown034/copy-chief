@@ -11,17 +11,16 @@ const DropZone = ({ onDropWord, index, wordIndex, placedWord }) => {
     }),
   });
 
-  // Change the background color when word is placed or hovered
-  let backgroundColor = placedWord ? "lightblue" : "#fff";
-  if (isOver) {
-    backgroundColor = "lightblue";
-  }
+  // Define Tailwind classes for each state
+  const baseClasses =
+    "h-12 p-2 text-lg font-bold border-2 border-blue-800 rounded-lg min-w-12";
+  const placedWordClasses = placedWord ? "bg-sky-800 text-sky-100" : "bg-white"; // Replace 'bg-lightblue-500' with your actual Tailwind class
+  const hoverClasses = isOver ? "bg-lightblue-500" : ""; // Replace 'bg-lightblue-500' with your actual Tailwind class
 
   return (
     <div
-      className="h-12 p-2 text-lg border-2 border-blue-800 rounded-lg min-w-12"
       ref={drop}
-      style={{ backgroundColor }}
+      className={`${baseClasses} ${placedWordClasses} ${hoverClasses}`}
     >
       {placedWord}
     </div>
@@ -51,13 +50,13 @@ export default function HeadlineGuess({ articles, onWordRemoved }) {
 
   // Render headlines and DropZones
   return (
-    <div className="space-y-6">
-      <div className="mb-2 text-2xl font-bold">Headline Guesses</div>
+    <div className="flex flex-col gap-2">
+      <div className="text-2xl font-bold">Headline Guesses</div>
       {articles.map((article, index) => (
         <div key={`headline-${index}`} className="flex flex-col">
           <div className="flex items-center">
             <strong>Headline #{index + 1}:</strong>
-            <span className="ml-2 text-sm text-gray-600">
+            <span className="ml-2 text-sm ">
               ({`${article.title.split(" ").length} words)`}
             </span>
           </div>
@@ -74,7 +73,14 @@ export default function HeadlineGuess({ articles, onWordRemoved }) {
           </div>
         </div>
       ))}
-      <button onClick={clearAllWords}>Clear All</button>
+      <div>
+        <button
+          className="p-2 px-4 text-lg bg-sky-600 hover:bg-sky-700 active:bg-sky-600 text-sky-100 rounded-xl"
+          onClick={clearAllWords}
+        >
+          Clear All
+        </button>
+      </div>
     </div>
   );
 }

@@ -55,7 +55,7 @@ export default function GameMenu({ backToMenu }) {
     <DndProvider backend={HTML5Backend}>
       <div className="min-h-screen ">
         <Header />
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-2">
           <HeadlineGuess
             articles={articles}
             onWordRemoved={handleWordRemoved}
