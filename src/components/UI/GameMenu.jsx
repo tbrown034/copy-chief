@@ -12,7 +12,7 @@ export default function GameMenu({ backToMenu }) {
   const [headlineCorrectness, setHeadlineCorrectness] = useState({});
 
   const API_KEY = import.meta.env.VITE_NYT_API_KEY;
-  const numOfArticles = 3;
+  const numOfArticles = 2;
 
   // Inside GameMenu component
   const handleWordRemoved = (word) => {

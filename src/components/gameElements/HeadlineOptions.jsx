@@ -18,7 +18,11 @@ export default function HeadlineOptions({ articles }) {
   };
 
   const removeWordFromOptions = (word) => {
-    // Logic to remove word from options
+    setWords((currentWords) => currentWords.filter((w) => w !== word));
+  };
+
+  const addWordToOptions = (word) => {
+    setWords((currentWords) => [...currentWords, word]);
   };
 
   return (

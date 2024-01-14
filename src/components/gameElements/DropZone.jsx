@@ -1,7 +1,13 @@
 import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 
-export default function DropZone({ onDropWord, index, wordIndex, placedWord }) {
+export default function DropZone({
+  onDropWord,
+  onRemoveWord,
+  index,
+  wordIndex,
+  placedWord,
+}) {
   //Dropping logic
   const [{ isOver }, drop] = useDrop({
     accept: "word",

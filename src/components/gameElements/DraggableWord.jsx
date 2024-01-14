@@ -1,6 +1,10 @@
 import { useDrag } from "react-dnd";
 
-export default function DraggableWord({ word, removeWordFromOptions }) {
+export default function DraggableWord({
+  word,
+  removeWordFromOptions,
+  addWordToOptions,
+}) {
   const [{ isDragging }, drag] = useDrag({
     type: "word",
     item: { word },
@@ -9,7 +13,7 @@ export default function DraggableWord({ word, removeWordFromOptions }) {
     }),
     end: (item, monitor) => {
       if (!monitor.didDrop()) {
-        addWordToOptions(item.word);
+        addWordToOptions(item.word); // Add this line
       }
     },
   });
