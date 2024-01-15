@@ -10,6 +10,7 @@ export default function GameMenu({ backToMenu }) {
   const [articles, setArticles] = useState([]);
   const [error, setError] = useState(null);
   const [headlineCorrectness, setHeadlineCorrectness] = useState({});
+  const [usedWords, setUsedWords] = useState([]);
 
   const API_KEY = import.meta.env.VITE_NYT_API_KEY;
   const numOfArticles = 2;
@@ -61,7 +62,11 @@ export default function GameMenu({ backToMenu }) {
             onWordRemoved={handleWordRemoved}
           />
 
-          <HeadlineOptions articles={articles} />
+          <HeadlineOptions
+            articles={articles}
+            usedWords={usedWords}
+            setUsedWords={setUsedWords}
+          />
           <HeadlineAnswers articles={articles} />
           <div className="flex justify-center">
             <button

@@ -1,29 +1,37 @@
 import React, { useState, useMemo } from "react";
 import DraggableWord from "./DraggableWord.jsx";
-export default function HeadlineOptions({ articles }) {
+export default function HeadlineOptions({ articles, usedWords, setUsedWords }) {
   const [sortOrder, setSortOrder] = useState("asc");
+  const [availableWords, setAvailableWords] = useState(() => {
+    const allWords = articles.flatMap((article) => article.title.split(/\s+/));
+    return [...new Set(allWords)]; // Initialize with unique words from articles
+  });
 
   const words = useMemo(() => {
-    const allWords = articles.flatMap((article) => article.title.split(/\s+/));
-    const uniqueWords = [...new Set(allWords)];
-    if (sortOrder === "asc") {
-      return uniqueWords.sort((a, b) => a.localeCompare(b));
-    } else {
-      return uniqueWords.sort((a, b) => b.localeCompare(a));
-    }
-  }, [articles, sortOrder]);
+    return sortOrder === "asc"
+      ? availableWords.sort((a, b) => a.localeCompare(b))
+      : availableWords.sort((a, b) => b.localeCompare(a));
+  }, [availableWords, sortOrder]);
 
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
   const removeWordFromOptions = (word) => {
-    setWords((currentWords) => currentWords.filter((w) => w !== word));
+    setAvailableWords((currentWords) => currentWords.filter((w) => w !== word));
   };
 
   const addWordToOptions = (word) => {
-    setWords((currentWords) => [...currentWords, word]);
+    if (!availableWords.includes(word)) {
+      setAvailableWords((currentWords) => [...currentWords, word]);
+    }
   };
+
+  const handleWordDragged = (word) => {
+    setUsedWords((prevUsedWords) => [...prevUsedWords, word]);
+  };
+
+  const isWordUsed = (word) => usedWords.includes(word);
 
   return (
     <div className="flex flex-col items-start gap-2 ">
@@ -49,6 +57,8 @@ export default function HeadlineOptions({ articles }) {
           <DraggableWord
             key={index}
             word={word}
+            isUsed={isWordUsed(word)}
+            onDragged={() => handleWordDragged(word)}
             removeWordFromOptions={removeWordFromOptions}
           />
         ))}
