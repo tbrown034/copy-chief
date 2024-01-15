@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import DropZone from "./DropZone";
 
-// HeadlineGuess component where all DropZones for a headline are rendered
-export default function HeadlineGuess({ articles, onWordRemoved }) {
+export default function HeadlineGuess({
+  articles,
+  onWordRemoved,
+  clearAllUsedWords,
+}) {
   const [droppedWords, setDroppedWords] = useState({});
 
-  // Function called when a word is dropped into a DropZone
   const handleDropWord = (word, index, wordIndex) => {
     setDroppedWords((prev) => {
       const newState = { ...prev };
-      // Remove the word from its previous position
+      const existingWord = newState[index] && newState[index][wordIndex];
+
+      if (existingWord && existingWord !== word) {
+        // If there's an existing word and it's not the same as the new word, re-add it to the options
+        onWordRemoved(existingWord);
+      }
+
       Object.keys(newState).forEach((key) => {
         Object.keys(newState[key]).forEach((wordKey) => {
           if (newState[key][wordKey] === word) {
@@ -17,7 +25,7 @@ export default function HeadlineGuess({ articles, onWordRemoved }) {
           }
         });
       });
-      // Add the word to the new position
+
       newState[index] = newState[index] || {};
       newState[index][wordIndex] = word;
       return newState;
@@ -27,7 +35,7 @@ export default function HeadlineGuess({ articles, onWordRemoved }) {
   // Function to clear all placed words
   const clearAllWords = () => {
     setDroppedWords({});
-    onWordRemoved(null); // null indicates clearing all words
+    clearAllUsedWords(); // Call this to reset the usedWords state
   };
 
   // Render headlines and DropZones

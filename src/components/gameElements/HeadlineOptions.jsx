@@ -1,11 +1,15 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import DraggableWord from "./DraggableWord.jsx";
+
 export default function HeadlineOptions({ articles, usedWords, setUsedWords }) {
   const [sortOrder, setSortOrder] = useState("asc");
-  const [availableWords, setAvailableWords] = useState(() => {
+  const [availableWords, setAvailableWords] = useState([]);
+
+  useEffect(() => {
     const allWords = articles.flatMap((article) => article.title.split(/\s+/));
-    return [...new Set(allWords)]; // Initialize with unique words from articles
-  });
+    const uniqueWords = [...new Set(allWords)];
+    setAvailableWords(uniqueWords.filter((word) => !usedWords.includes(word)));
+  }, [usedWords, articles]);
 
   const words = useMemo(() => {
     return sortOrder === "asc"
@@ -17,22 +21,15 @@ export default function HeadlineOptions({ articles, usedWords, setUsedWords }) {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  const removeWordFromOptions = (word) => {
-    setAvailableWords((currentWords) => currentWords.filter((w) => w !== word));
-  };
-
-  const addWordToOptions = (word) => {
-    if (!availableWords.includes(word)) {
-      setAvailableWords((currentWords) => [...currentWords, word]);
-    }
-  };
-
   const handleWordDragged = (word) => {
     setUsedWords((prevUsedWords) => [...prevUsedWords, word]);
   };
 
-  const isWordUsed = (word) => usedWords.includes(word);
+  const removeWordFromOptions = (word) => {
+    setAvailableWords((currentWords) => currentWords.filter((w) => w !== word));
+  };
 
+  const isWordUsed = (word) => usedWords.includes(word);
   return (
     <div className="flex flex-col items-start gap-2 ">
       <div className="mb-2 text-2xl font-bold">Headline Options</div>

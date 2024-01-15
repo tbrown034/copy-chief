@@ -15,10 +15,12 @@ export default function GameMenu({ backToMenu }) {
   const API_KEY = import.meta.env.VITE_NYT_API_KEY;
   const numOfArticles = 2;
 
-  // Inside GameMenu component
+  const clearAllUsedWords = () => {
+    setUsedWords([]);
+  };
+
   const handleWordRemoved = (word) => {
-    // Logic to handle a word being removed.
-    // This could involve updating state or any other logic needed.
+    setUsedWords((prevWords) => prevWords.filter((w) => w !== word));
   };
 
   // Inside your component return function, pass it down to HeadlineGuess
@@ -60,6 +62,7 @@ export default function GameMenu({ backToMenu }) {
           <HeadlineGuess
             articles={articles}
             onWordRemoved={handleWordRemoved}
+            clearAllUsedWords={clearAllUsedWords}
           />
 
           <HeadlineOptions

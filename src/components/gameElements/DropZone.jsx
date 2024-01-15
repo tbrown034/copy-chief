@@ -8,7 +8,7 @@ export default function DropZone({
   wordIndex,
   placedWord,
 }) {
-  //Dropping logic
+  // Dropping logic
   const [{ isOver }, drop] = useDrop({
     accept: "word",
     drop: (item) => onDropWord(item.word, index, wordIndex),
@@ -16,16 +16,18 @@ export default function DropZone({
       isOver: !!monitor.isOver(),
     }),
   });
-  //Dragging after dropping logic
+
+  // Dragging after dropping logic
   const [{ isDragging }, drag] = useDrag({
     type: "word",
-    item: { type: "word", index, wordIndex, word: placedWord }, // Include the actual word here
+    item: { type: "word", index, wordIndex, word: placedWord },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
     end: (item, monitor) => {
+      // If the item is not dropped in a new target, re-add it to the options
       if (!monitor.didDrop()) {
-        onRemoveWord(item.word); // Call onRemoveWord to re-add the word to the options
+        onRemoveWord(item.word);
       }
     },
   });
@@ -33,7 +35,7 @@ export default function DropZone({
   // Tailwind CSS classes for base, hover effect, and placed word
   const baseClasses =
     "h-12 p-2 text-lg font-bold border-2 border-blue-800 rounded-lg min-w-[3rem]";
-  const hoverClasses = isDragging ? "bg-gray-200" : "";
+  const hoverClasses = isOver ? "bg-gray-200" : ""; // Changed to isOver for drop hover effect
   const placedWordClasses = placedWord ? "bg-sky-800 text-white" : "bg-white";
   const pointer = placedWord ? "hover:cursor-pointer" : "";
 
@@ -45,7 +47,7 @@ export default function DropZone({
   return (
     <div
       ref={dropZoneRef}
-      className={` ${pointer} ${baseClasses} ${placedWordClasses} ${hoverClasses}`}
+      className={`${pointer} ${baseClasses} ${placedWordClasses} ${hoverClasses}`}
     >
       {placedWord}
     </div>
